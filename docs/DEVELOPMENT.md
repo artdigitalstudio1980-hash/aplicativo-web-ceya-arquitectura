@@ -13,7 +13,15 @@
 
 No cambies la versión de Node sin validar Next.js, Prisma, Docker y CI. El proyecto usa `nvm`.
 
-## 2. Puesta en marcha (FASE 1)
+## 2. Estado actual (FASE 1)
+
+- Scaffold Next.js 16.4.6 (App Router), React 19.3.1, TypeScript 5.9.3, Tailwind 4.3.5 y ESLint 9.39.5.
+- `npm run dev` disponible en `http://localhost:3000`.
+- `npm run lint`, `npm run typecheck`, `npm run build` y `npm run audit` en verde.
+- Sin base de datos, Docker ni pruebas automatizadas todavía (FASE 3, 6 y 7).
+- ESLint 10 aún no es compatible con los plugins de `eslint-config-next`; ver ADR-009.
+
+## 3. Puesta en marcha (FASE 1)
 
 ```bash
 git clone https://github.com/artdigitalstudio1980-hash/aplicativo-web-ceya-arquitectura.git
@@ -30,7 +38,7 @@ Aplicación local: `http://localhost:3000`.
 
 > El contenedor PostgreSQL de CEYA debe usar un puerto local libre (por ejemplo `5433`), porque el `5432` está ocupado por otro proyecto. No detengas servicios ajenos sin autorización.
 
-## 3. Scripts previstos
+## 4. Scripts previstos
 
 | Comando | Función |
 |---|---|
@@ -45,7 +53,7 @@ Aplicación local: `http://localhost:3000`.
 | `npm run db:migrate` | Migraciones en desarrollo |
 | `npm run db:studio` | Prisma Studio (solo local) |
 
-## 4. Flujo de trabajo
+## 5. Flujo de trabajo
 
 - `main` es la rama estable; los cambios entran por ramas `feat/`, `fix/`, `chore/`, `docs/`.
 - Commits con Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`, `test:`, `security:`).
@@ -53,7 +61,7 @@ Aplicación local: `http://localhost:3000`.
 - No se hace merge con controles fallidos ni se desactivan reglas para "pasar".
 - Revisión obligatoria de cambios que toquen auth, pagos, datos personales, Docker o CI.
 
-## 5. Calidad
+## 6. Calidad
 
 - TypeScript estricto; evitar `any` sin justificación.
 - Validación Zod en el límite del sistema (formularios y Route Handlers).
@@ -61,13 +69,13 @@ Aplicación local: `http://localhost:3000`.
 - Pruebas para cada funcionalidad: unitarias, integración, API, auth y E2E en flujos críticos.
 - Cobertura mínima acordada por módulo; no se declara terminado sin pruebas.
 
-## 6. Variables de entorno
+## 7. Variables de entorno
 
 - Se definen en `.env` local (ignorado por Git) y en el gestor de secretos del entorno desplegado.
 - `.env.example` solo contiene nombres y valores locales no sensibles.
 - Nunca se imprimen secretos en logs ni se envían por chat.
 
-## 7. Problemas frecuentes
+## 8. Problemas frecuentes
 
 | Síntoma | Causa probable | Acción |
 |---|---|---|
@@ -77,7 +85,7 @@ Aplicación local: `http://localhost:3000`.
 | Docker sin espacio | Imágenes/caché acumuladas | Limpiar solo con autorización |
 | Permiso denegado en Docker | Grupo `docker` no aplicado | Cerrar sesión o usar `sudo` con criterio |
 
-## 8. Definición de terminado
+## 9. Definición de terminado
 
 - Funcionalidad implementada y validada en servidor.
 - Pruebas agregadas y pasando.

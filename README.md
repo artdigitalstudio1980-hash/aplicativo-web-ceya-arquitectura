@@ -5,7 +5,7 @@
 | Campo | Valor |
 |---|---|
 | Dominio objetivo | `ceyaarquitectura.com` |
-| Estado | FASE 0 completada (auditoría) · FASE 1 pendiente (scaffold) |
+| Estado | FASE 1 completada (scaffold Next.js) · FASE 2 pendiente |
 | Repositorio | Público durante el desarrollo, sin secretos ni datos personales |
 | Licencia | Propietaria — todos los derechos reservados |
 

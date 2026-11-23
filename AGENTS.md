@@ -9,7 +9,7 @@
 | **Dominio** | `ceyaarquitectura.com` |
 | **Sistema de desarrollo** | Ubuntu 24.04 |
 | **Metodología** | Desarrollo por fases, automatización, seguridad desde el diseño y despliegue continuo |
-| **Estado actual** | FASE 0 completada — FASE 1 pendiente |
+| **Estado actual** | FASE 1 completada — FASE 2 pendiente |
 | **Documento creado** | 2026-11-20 |
 
 ---

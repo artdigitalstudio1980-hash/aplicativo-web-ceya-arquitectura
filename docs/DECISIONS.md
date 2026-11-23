@@ -57,3 +57,10 @@ Registro breve de decisiones relevantes. Cada ADR indica contexto, decisión, co
 - **Contexto:** el repositorio es público y los recursos de marca son propiedad intelectual.
 - **Decisión:** mantener PDFs, SVG y fotografías fuera del repositorio; incorporar solo assets optimizados y autorizados cuando la implementación los requiera.
 - **Consecuencias:** evita filtrar documentos internos; exige un paso controlado de incorporación de assets en FASE 2.
+
+## ADR-009 — ESLint 9.39.5 (fijación temporal)
+
+- **Estado:** aceptada temporalmente.
+- **Contexto:** ESLint 10.15.0 es la versión actual, pero `eslint-config-next` 16.4.6 y sus plugins declaran soporte hasta ESLint 9; con ESLint 10 npm reporta peers inválidos.
+- **Decisión:** fijar 9.39.5 (última 9.x) y no usar `--legacy-peer-deps` para ocultar la incompatibilidad.
+- **Consecuencias:** npm marca 9.39.5 como no soportada. Revisar en cada actualización de Next.js y migrar a ESLint 10 cuando `eslint-config-next` y sus plugins lo soporten.

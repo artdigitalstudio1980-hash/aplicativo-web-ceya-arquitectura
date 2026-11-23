@@ -14,19 +14,20 @@
 | Capa | Tecnología | Versión / nota |
 |---|---|---|
 | Runtime | Node.js | 24.14.0 (`.nvmrc`) |
-| Framework | Next.js (App Router) | 16.4.6 verificado |
-| UI | React | 19.3.1 verificado |
-| Lenguaje | TypeScript | fijar versión compatible con Next.js 16 y validar con build |
-| Estilos | Tailwind CSS | 4.3.5 verificado |
-| Validación | Zod | 4.6.7 verificado |
+| Framework | Next.js (App Router) | 16.4.6 |
+| UI | React | 19.3.1 |
+| Lenguaje | TypeScript | 5.9.3 (no adoptar 7.x sin validar) |
+| Estilos | Tailwind CSS | 4.3.5 |
+| Lint | ESLint | 9.39.5 (temporal; ver ADR-009) |
+| Validación | Zod | 4.6.7 previsto (FASE 3) |
 | Base de datos | PostgreSQL | 16 (contenedor interno) |
-| ORM | Prisma | 7.10.1 estable (no usar 8.0.0-rc) |
+| ORM | Prisma | 7.10.1 estable previsto (no usar 8.0.0-rc) |
 | Contenedores | Docker + Compose | 29.1.3 / 2.40.3 en desarrollo |
 | Proxy | Caddy | TLS automático en producción |
 | CI/CD | GitHub Actions | Actions fijadas por SHA |
 | IA | OpenClaw + modelos cloud | Red aislada, tools vía API |
 
-Las versiones se confirman en FASE 1 con `npm ci`, `npm run build`, `npm audit` y pruebas antes de fijarlas en el lockfile.
+FASE 1 confirmó Next.js 16.4.6, React 19.3.1, TypeScript 5.9.3, Tailwind 4.3.5 y ESLint 9.39.5 con build, lint, typecheck y `npm audit` en verde. Prisma y Zod se incorporan en FASE 3.
 
 ## 3. Arquitectura lógica
 
