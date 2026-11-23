@@ -1,6 +1,6 @@
 # CI/CD — CEYA Arquitectura
 
-> Estado: planificación. Los workflows se implementan en la FASE 8. No se publican imágenes ni se despliega a producción sin autorización.
+> Estado: activo para calidad y seguridad (FASE 8 parcial); despliegue a producción pendiente de autorización.
 
 ## 1. Principios
 
@@ -12,28 +12,35 @@
 
 ## 2. CI (pull request y push a `main`)
 
+Workflow: `.github/workflows/ci.yml`
+
 | Paso | Herramienta | Bloqueante |
 |---|---|---|
 | Checkout | `actions/checkout` (SHA fijo) | Sí |
-| Node.js 24.14.0 | `actions/setup-node` + caché npm | Sí |
+| Node.js 24.14.0 | `actions/setup-node` (SHA fijo) + caché npm | Sí |
 | Instalación | `npm ci` | Sí |
 | Lint | ESLint | Sí |
 | Tipos | `tsc --noEmit` | Sí |
-| Pruebas | Vitest/Playwright según alcance | Sí |
+| Pruebas | Vitest | Sí |
 | Auditoría | `npm audit --audit-level=high` | Sí |
-| Build | `next build` | Sí |
+| Build | `npm run build` | Sí |
 | Secretos | Gitleaks | Sí |
-| Análisis estático | CodeQL (repositorio público) | Sí |
 
-## 3. Imagen Docker
+## 3. Análisis estático
+
+Workflow: `.github/workflows/codeql.yml`
+
+- CodeQL para `javascript-typescript`.
+- Permisos `security-events: write` y `contents: read`.
+
+## 4. Imagen Docker
 
 - Build multi-stage (`deps` → `builder` → `runner`).
 - Usuario no root, solo artefactos de producción.
 - Escaneo con Trivy; fallo ante críticos sin mitigación documentada.
 - Publicación en registro solo tras autorización.
-- Etiquetas por commit SHA; nunca `latest` como única referencia.
 
-## 4. CD (futuro)
+## 5. CD (futuro)
 
 - Entorno staging separado de producción.
 - Despliegue por SSH con clave dedicada y usuario de mínimo privilegio.
@@ -41,7 +48,7 @@
 - Healthcheck posterior y verificación de flujo crítico.
 - Rollback a la imagen/commit anterior documentado.
 
-## 5. Permisos y seguridad del pipeline
+## 6. Permisos y seguridad del pipeline
 
 ```yaml
 permissions:
@@ -54,14 +61,14 @@ permissions:
 - `concurrency` para cancelar ejecuciones obsoletas.
 - Dependencias de Actions auditadas y actualizadas con revisión.
 
-## 6. Plan de GitHub
+## 7. Plan de GitHub
 
 - Repositorio **público**: CodeQL y secret scanning disponibles sin costo.
 - Protección de `main` y reglas de revisión configurables.
 - Environments con aprobación para producción.
 - Si el repositorio pasa a privado, revisar disponibilidad de estas funciones en el plan contratado.
 
-## 7. Criterios de aceptación
+## 8. Criterios de aceptación
 
 - Pipeline verde en `main`.
 - Sin secretos detectados.

@@ -13,58 +13,56 @@
 
 No cambies la versión de Node sin validar Next.js, Prisma, Docker y CI. El proyecto usa `nvm`.
 
-## 2. Estado actual (FASE 1)
+## 2. Estado actual (FASE 2)
 
-- Scaffold Next.js 16.4.6 (App Router), React 19.3.1, TypeScript 5.9.3, Tailwind 4.3.5 y ESLint 9.39.5.
-- `npm run dev` disponible en `http://localhost:3000`.
-- `npm run lint`, `npm run typecheck`, `npm run build` y `npm run audit` en verde.
-- Sin base de datos, Docker ni pruebas automatizadas todavía (FASE 3, 6 y 7).
-- ESLint 10 aún no es compatible con los plugins de `eslint-config-next`; ver ADR-009.
+- Monorepo con `frontend/` (Next.js 16), `backend/` (Fastify 5) y `packages/shared/` (`@ceya/shared`).
+- Backend con health check (`GET /health`), validación Zod de contacto (`POST /api/contact`), helmet, CORS y rate limit.
+- `npm run dev` levanta shared, backend y frontend.
+- `npm run lint`, `npm run typecheck`, `npm run test`, `npm run audit` y `npm run build` en verde.
+- CI con lint, typecheck, pruebas, auditoría, build y Gitleaks; CodeQL configurado.
+- Sin base de datos, Docker ni pruebas automatizadas de navegador todavía (FASE 6, 7 y 8).
 
-## 3. Puesta en marcha (FASE 1)
+## 3. Puesta en marcha (FASE 2)
 
 ```bash
 git clone https://github.com/artdigitalstudio1980-hash/aplicativo-web-ceya-arquitectura.git
 cd aplicativo-web-ceya-arquitectura
 nvm use            # 24.14.0
-npm ci
-cp .env.example .env
-docker compose up -d db
-npx prisma migrate dev
+npm install
 npm run dev
 ```
 
 Aplicación local: `http://localhost:3000`.
 
-> El contenedor PostgreSQL de CEYA debe usar un puerto local libre (por ejemplo `5433`), porque el `5432` está ocupado por otro proyecto. No detengas servicios ajenos sin autorización.
+Backend local: `http://localhost:3001` (`GET /health`).
 
-## 4. Scripts previstos
+> El contenedor PostgreSQL de CEYA debe usar un puerto local libre (por ejemplo `5433`), porque el `5432` está ocupado por otro proyecto.
+
+## 4. Scripts
 
 | Comando | Función |
 |---|---|
-| `npm run dev` | Servidor de desarrollo |
-| `npm run build` | Build de producción |
-| `npm run start` | Servidor de producción local |
-| `npm run lint` | ESLint |
-| `npm run typecheck` | `tsc --noEmit` |
-| `npm run test` | Pruebas unitarias/integración |
-| `npm run test:e2e` | Pruebas end-to-end |
-| `npm run audit` | `npm audit --audit-level=high` |
-| `npm run db:migrate` | Migraciones en desarrollo |
-| `npm run db:studio` | Prisma Studio (solo local) |
+| `npm run dev` | Compila shared y levanta backend + frontend. |
+| `npm run dev:frontend` | Levanta solo el frontend. |
+| `npm run dev:backend` | Levanta solo el backend. |
+| `npm run build` | Build de shared, backend y frontend. |
+| `npm run lint` | ESLint en todos los workspaces. |
+| `npm run typecheck` | `tsc --noEmit`. |
+| `npm run test` | Pruebas con Vitest. |
+| `npm run audit` | `npm audit --audit-level=high`. |
 
 ## 5. Flujo de trabajo
 
 - `main` es la rama estable; los cambios entran por ramas `feat/`, `fix/`, `chore/`, `docs/`.
-- Commits con Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`, `test:`, `security:`).
-- Antes de abrir PR: lint, typecheck, pruebas y build en verde.
+- Commits con Conventional Commits.
+- Antes de abrir PR: lint, typecheck, pruebas, build y auditoría en verde.
 - No se hace merge con controles fallidos ni se desactivan reglas para "pasar".
 - Revisión obligatoria de cambios que toquen auth, pagos, datos personales, Docker o CI.
 
 ## 6. Calidad
 
 - TypeScript estricto; evitar `any` sin justificación.
-- Validación Zod en el límite del sistema (formularios y Route Handlers).
+- Validación Zod en el límite del sistema (formularios y backend).
 - Manejo de errores sin filtrar trazas, SQL ni rutas internas al cliente.
 - Pruebas para cada funcionalidad: unitarias, integración, API, auth y E2E en flujos críticos.
 - Cobertura mínima acordada por módulo; no se declara terminado sin pruebas.
@@ -72,7 +70,8 @@ Aplicación local: `http://localhost:3000`.
 ## 7. Variables de entorno
 
 - Se definen en `.env` local (ignorado por Git) y en el gestor de secretos del entorno desplegado.
-- `.env.example` solo contiene nombres y valores locales no sensibles.
+- `frontend/.env.example` y `backend/.env.example` son plantillas.
+- `.env.example` raíz documenta las variables compartidas.
 - Nunca se imprimen secretos en logs ni se envían por chat.
 
 ## 8. Problemas frecuentes

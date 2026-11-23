@@ -18,10 +18,10 @@ Registro breve de decisiones relevantes. Cada ADR indica contexto, decisión, co
 
 ## ADR-003 — Next.js 16 + React 19 + Tailwind 4
 
-- **Estado:** aceptada.
-- **Contexto:** se requiere un framework único para frontend, backend y API, con buen soporte de SSR y SEO.
-- **Decisión:** Next.js 16 (App Router), React 19 y Tailwind 4.
-- **Consecuencias:** versiones recientes; validar estabilidad de dependencias y documentación en FASE 1.
+- **Estado:** aceptada (parcialmente superada en backend por ADR-010).
+- **Contexto:** se requería un framework único para frontend, backend y API, con buen soporte de SSR y SEO.
+- **Decisión:** Next.js 16 (App Router), React 19 y Tailwind 4 para el frontend.
+- **Consecuencias:** validación de estabilidad de dependencias y documentación en FASE 1; backend separado con Fastify.
 
 ## ADR-004 — PostgreSQL 16 + Prisma 7.10.1
 
@@ -61,6 +61,13 @@ Registro breve de decisiones relevantes. Cada ADR indica contexto, decisión, co
 ## ADR-009 — ESLint 9.39.5 (fijación temporal)
 
 - **Estado:** aceptada temporalmente.
-- **Contexto:** ESLint 10.15.0 es la versión actual, pero `eslint-config-next` 16.4.6 y sus plugins declaran soporte hasta ESLint 9; con ESLint 10 npm reporta peers inválidos.
+- **Contexto:** ESLint 10 es la versión actual, pero `eslint-config-next` 16.4.6 y sus plugins declaran soporte hasta ESLint 9; con ESLint 10 npm reporta peers inválidos.
 - **Decisión:** fijar 9.39.5 (última 9.x) y no usar `--legacy-peer-deps` para ocultar la incompatibilidad.
 - **Consecuencias:** npm marca 9.39.5 como no soportada. Revisar en cada actualización de Next.js y migrar a ESLint 10 cuando `eslint-config-next` y sus plugins lo soporten.
+
+## ADR-010 — Monorepo con frontend Next.js y backend Fastify
+
+- **Estado:** aceptada.
+- **Contexto:** se requiere separar la interfaz pública de la API, mantener contratos compartidos y preparar CI/ despliegue independientes.
+- **Decisión:** usar monorepo npm workspaces con `frontend/`, `backend/` y `packages/shared/`; backend Fastify con Zod y seguridad base.
+- **Consecuencias:** build en capas; `@ceya/shared` como contrato TypeScript/Zod; Caddy enrutará `/` al frontend y `/api` al backend.

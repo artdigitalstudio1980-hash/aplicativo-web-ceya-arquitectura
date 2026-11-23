@@ -3,7 +3,7 @@
 ## 1. Principios
 
 - **Seguridad desde el diseño:** validación en cliente y servidor, autorización en backend, mínimo privilegio.
-- **Simplicidad mantenible:** un solo framework (Next.js) para frontend, backend y API; módulos por dominio.
+- **Separación de frontend y backend:** Next.js para la interfaz pública y Fastify para la API; comparten contratos mediante `@ceya/shared`.
 - **Reproducibilidad:** versiones fijadas, Docker multi-stage, migraciones versionadas.
 - **Aislamiento de IA:** OpenClaw no es dependencia del sitio ni tiene acceso directo a base de datos o servidor.
 - **Aprobación humana** para operaciones sensibles (pagos, envíos masivos, cambios de contenido crítico).
@@ -14,20 +14,21 @@
 | Capa | Tecnología | Versión / nota |
 |---|---|---|
 | Runtime | Node.js | 24.14.0 (`.nvmrc`) |
-| Framework | Next.js (App Router) | 16.4.6 |
+| Frontend | Next.js (App Router) | 16.4.6 |
 | UI | React | 19.3.1 |
+| Backend API | Fastify | 5.12.8 |
 | Lenguaje | TypeScript | 5.9.3 (no adoptar 7.x sin validar) |
 | Estilos | Tailwind CSS | 4.3.5 |
 | Lint | ESLint | 9.39.5 (temporal; ver ADR-009) |
-| Validación | Zod | 4.6.7 previsto (FASE 3) |
-| Base de datos | PostgreSQL | 16 (contenedor interno) |
-| ORM | Prisma | 7.10.1 estable previsto (no usar 8.0.0-rc) |
+| Validación | Zod | 4.6.7 |
+| Base de datos | PostgreSQL | 16 (contenedor interno, FASE 3) |
+| ORM | Prisma | 7.10.1 estable (FASE 3) |
 | Contenedores | Docker + Compose | 29.1.3 / 2.40.3 en desarrollo |
 | Proxy | Caddy | TLS automático en producción |
 | CI/CD | GitHub Actions | Actions fijadas por SHA |
 | IA | OpenClaw + modelos cloud | Red aislada, tools vía API |
 
-FASE 1 confirmó Next.js 16.4.6, React 19.3.1, TypeScript 5.9.3, Tailwind 4.3.5 y ESLint 9.39.5 con build, lint, typecheck y `npm audit` en verde. Prisma y Zod se incorporan en FASE 3.
+FASE 2 confirmó el monorepo frontend/backend con Next.js 16, Fastify 5, TypeScript 5.9.3, Zod 4 y ESLint 9 con build, lint, typecheck, tests y auditoría en verde.
 
 ## 3. Arquitectura lógica
 
@@ -36,12 +37,12 @@ FASE 1 confirmó Next.js 16.4.6, React 19.3.1, TypeScript 5.9.3, Tailwind 4.3.5 
                        |
                  HTTPS / TLS
                        |
-                  CADDY (proxy)
+                 CADDY (proxy)
                        |
-                 NEXT.JS APP
         +--------------+--------------+
         |              |              |
-    FRONTEND        API/AUTH      ADMIN PANEL
+   FRONTEND         BACKEND        ADMIN PANEL
+   Next.js          Fastify         (por definir)
         |              |
         +------ SERVICES / DOMINIO
                        |
@@ -50,30 +51,25 @@ FASE 1 confirmó Next.js 16.4.6, React 19.3.1, TypeScript 5.9.3, Tailwind 4.3.5 
          POSTGRESQL          FILE STORAGE
              |
         BACKUPS / LOGS
-
-          RED AISLADA
-               |
-            OPENCLAW
-               |
-        AGENTES / TOOLS
-               |
-        API BACKEND (RBAC + auditoría)
 ```
+
+- Caddy expone el frontend en `/` y delega `/api/*` al backend en la red interna.
+- El frontend consume la API mediante contratos validados en `@ceya/shared`.
 
 ## 4. Capas de la aplicación
 
-- `src/app/(public)`: páginas públicas y rutas SEO.
-- `src/app/(admin)`: panel protegido; toda acción se revalida en servidor.
-- `src/app/api`: Route Handlers; validación Zod, autorización, rate limiting y errores seguros.
-- `src/features`: lógica por dominio (servicios, productos, proyectos, cotizaciones, contacto, administración).
-- `src/lib`: seguridad, validación, base de datos, utilidades.
-- `src/services`: casos de uso y acceso a datos.
-- `prisma`: esquema y migraciones versionadas.
+- `frontend/src/app/(public)`: páginas públicas y rutas SEO.
+- `frontend/src/app/(admin)`: panel protegido; toda acción se revalida en servidor.
+- `backend/src/routes`: endpoints API (health, contacto, futuros módulos).
+- `backend/src/config`: validación de entorno con Zod.
+- `backend/src/app.ts`: registro de plugins y seguridad base.
+- `packages/shared/src`: esquemas Zod y tipos compartidos.
+- `backend/prisma`: esquema y migraciones versionadas (FASE 3).
 
 ## 5. Flujo de datos
 
 1. El cliente envía una solicitud validada (Zod) por HTTPS.
-2. El servidor autentica, autoriza y aplica límites de solicitud.
+2. El backend autentica, autoriza y aplica límites de solicitud.
 3. La capa de servicios ejecuta la operación con consultas parametrizadas.
 4. Prisma persiste en PostgreSQL dentro de la red interna.
 5. Se registra auditoría si la operación es sensible.
@@ -104,7 +100,7 @@ FASE 1 confirmó Next.js 16.4.6, React 19.3.1, TypeScript 5.9.3, Tailwind 4.3.5 
 | Entorno | Estado | Uso |
 |---|---|---|
 | Local | Disponible | Desarrollo y pruebas |
-| CI | A definir en FASE 8 | Lint, tipos, pruebas, build, seguridad |
+| CI | Activo (FASE 8) | Lint, tipos, pruebas, build, auditoría, Gitleaks, CodeQL |
 | Staging | Pendiente | Pruebas dinámicas y aceptación |
 | Producción | Pendiente de autorización | Hostinger VPS |
 

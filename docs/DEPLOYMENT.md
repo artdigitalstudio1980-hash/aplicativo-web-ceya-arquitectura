@@ -5,7 +5,9 @@
 ## 1. Arquitectura objetivo
 
 ```text
-Internet → HTTPS → Caddy (VPS) → Next.js (contenedor)
+Internet → HTTPS → Caddy (VPS) → Next.js frontend (contenedor) / Fastify backend (contenedor)
+                                   ├── Frontend: Next.js en `/`
+                                   ├── Backend: Fastify en `/api`
                                    ├── PostgreSQL (red interna)
                                    ├── almacenamiento de archivos
                                    └── OpenClaw (red aislada)

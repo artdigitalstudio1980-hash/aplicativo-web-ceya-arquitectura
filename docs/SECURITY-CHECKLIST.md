@@ -16,7 +16,7 @@ Marcar solo cuando el control esté implementado y verificado. Un control desact
 
 - [ ] ESLint sin errores bloqueantes.
 - [ ] TypeScript estricto y `tsc --noEmit` en verde.
-- [ ] Validación Zod en formularios y Route Handlers.
+- [ ] Validación Zod en formularios y backend (Fastify).
 - [ ] Autorización verificada en servidor en cada operación sensible.
 - [ ] Manejo de errores sin filtrar trazas, SQL ni rutas internas.
 - [ ] Protección XSS: escape por defecto, sanitización de HTML enriquecido.
@@ -48,6 +48,7 @@ Marcar solo cuando el control esté implementado y verificado. Un control desact
 - [ ] Rate limiting en login, contacto, cotizaciones y API pública.
 - [ ] Antispam (honeypot, tiempo mínimo, captcha o equivalente).
 - [ ] Respuestas de error genéricas para el cliente.
+- [ ] Health check de aplicación y rate limit en backend.
 - [ ] Límites de tamaño de payload y de subida de archivos.
 - [ ] Validación de tipo real de archivos y almacenamiento seguro.
 

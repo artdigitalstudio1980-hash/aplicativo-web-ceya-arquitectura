@@ -9,7 +9,7 @@
 | **Dominio** | `ceyaarquitectura.com` |
 | **Sistema de desarrollo** | Ubuntu 24.04 |
 | **Metodología** | Desarrollo por fases, automatización, seguridad desde el diseño y despliegue continuo |
-| **Estado actual** | FASE 1 completada — FASE 2 pendiente |
+| **Estado actual** | FASE 2 completada (monorepo frontend/backend) — FASE 3 pendiente |
 | **Documento creado** | 2026-11-20 |
 
 ---
@@ -121,7 +121,7 @@ Construye la solución con esta arquitectura objetivo:
 | Componente | Tecnología |
 |---|---|
 | Frontend | Next.js |
-| Backend | Next.js Route Handlers / servicios |
+| Backend | Fastify 5 (API REST) |
 | Lenguaje | TypeScript |
 | Interfaz | Tailwind CSS |
 | Base de datos | PostgreSQL |
@@ -255,40 +255,39 @@ Diseña una estructura organizada y modular, adaptada a las funcionalidades real
 ```text
 aplicativo-web-ceya-arquitectura/
 │
-├── public/
-│   ├── images/
-│   ├── logos/
-│   └── icons/
-│
-├── src/
-│   ├── app/
-│   │   ├── (public)/
-│   │   ├── (admin)/
-│   │   ├── api/
-│   │   ├── layout.tsx
-│   │   └── page.tsx
+├── frontend/
+│   ├── public/
+│   │   ├── images/
+│   │   ├── logos/
+│   │   └── icons/
 │   │
-│   ├── components/
-│   │   ├── ui/
-│   │   ├── layout/
-│   │   └── shared/
-│   │
-│   ├── features/
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── (public)/
+│   │   │   ├── (admin)/
+│   │   │   ├── layout.tsx
+│   │   │   └── page.tsx
+│   │   ├── components/
+│   │   ├── features/
+│   │   ├── lib/
 │   │   ├── services/
-│   │   ├── projects/
-│   │   ├── portfolio/
-│   │   ├── contact/
-│   │   └── administration/
+│   │   ├── types/
+│   │   └── styles/
 │   │
-│   ├── lib/
-│   │   ├── security/
-│   │   ├── validation/
-│   │   ├── database/
-│   │   └── utilities/
-│   │
-│   ├── services/
-│   ├── types/
-│   └── styles/
+│   ├── next.config.ts
+│   └── package.json
+│
+├── backend/
+│   ├── src/
+│   │   ├── app.ts
+│   │   ├── config/
+│   │   ├── routes/
+│   │   └── ...
+│   ├── tests/
+│   └── package.json
+│
+├── packages/
+│   └── shared/
 │
 ├── prisma/
 │

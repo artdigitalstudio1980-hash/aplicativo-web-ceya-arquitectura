@@ -2,31 +2,34 @@
   "name": "aplicativo-web-ceya-arquitectura",
   "version": "0.1.0",
   "private": true,
+  "description": "Plataforma web de CEYA Arquitectura: monorepo frontend Next.js + backend Fastify.",
   "engines": {
     "node": ">=24.14.0 <25",
     "npm": ">=11.9.0"
   },
+  "workspaces": [
+    "frontend",
+    "backend",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint",
-    "typecheck": "tsc --noEmit",
+    "dev": "npm run build -w @ceya/shared && concurrently -k -n shared,backend,frontend -c blue,green,magenta \"npm:dev:shared\" \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "dev:frontend": "npm run dev -w @ceya/frontend",
+    "dev:backend": "npm run dev -w @ceya/backend",
+    "dev:shared": "npm run dev -w @ceya/shared",
+    "build": "npm run build -w @ceya/shared && npm run build -w @ceya/backend && npm run build -w @ceya/frontend",
+    "start:frontend": "npm run start -w @ceya/frontend",
+    "start:backend": "npm run start -w @ceya/backend",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run build -w @ceya/shared && npm run typecheck -w @ceya/backend && npm run typecheck -w @ceya/frontend",
+    "test": "npm run test -w @ceya/backend",
     "audit": "npm audit --audit-level=high"
   },
-  "dependencies": {
-    "next": "16.4.6",
-    "react": "19.3.1",
-    "react-dom": "19.3.1"
-  },
   "devDependencies": {
-    "@tailwindcss/turbopack": "4.3.5",
-    "@types/node": "^24.19.2",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@eslint/js": "9.39.5",
+    "concurrently": "10.0.7",
     "eslint": "9.39.5",
-    "eslint-config-next": "16.4.6",
-    "tailwindcss": "4.3.5",
-    "typescript": "^5.9.3"
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.73.0"
   }
 }

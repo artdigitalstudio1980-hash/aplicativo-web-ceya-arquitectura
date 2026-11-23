@@ -41,7 +41,7 @@ export default function Home() {
             Sitio en preparación
           </span>
           <span className="inline-flex items-center rounded border border-[#8A95A5]/40 bg-[#262A33] px-5 py-3 text-sm font-medium text-[#CBD5E1]">
-            FASE 1 · Scaffold
+            FASE 2 · Monorepo
           </span>
         </div>
 
@@ -62,7 +62,7 @@ export default function Home() {
       <footer className="border-t border-[#CBD5E1]/10 px-6 py-6 text-xs text-[#8A95A5] sm:px-8">
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <p>© CEYA Arquitectura. Todos los derechos reservados.</p>
-          <p>Next.js · TypeScript · PostgreSQL · Docker</p>
+          <p>Next.js · Fastify · TypeScript · PostgreSQL</p>
         </div>
       </footer>
     </main>

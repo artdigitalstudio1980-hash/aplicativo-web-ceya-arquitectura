@@ -1,6 +1,6 @@
 # Dependencias
-/node_modules
-/.pnp
+node_modules/
+.pnp
 .pnp.*
 .yarn/*
 !.yarn/patches
@@ -9,13 +9,13 @@
 !.yarn/versions
 
 # Next.js
-/.next/
-/out/
-/build
+**/.next/
+**/out/
+**/build/
 next-env.d.ts
 
 # Producción
-/dist
+dist/
 
 # Entorno y secretos
 .env
@@ -33,8 +33,8 @@ logs
 *.log
 
 # Pruebas y cobertura
-/coverage
-/.nyc_output
+coverage/
+.nyc_output
 /test-results
 /playwright-report
 
@@ -54,8 +54,8 @@ logs
 .netlify
 
 # Datos locales
-/prisma/dev.db
-/prisma/dev.db-journal
+**/prisma/dev.db
+**/prisma/dev.db-journal
 
 # Recursos locales de marca y catálogos (no versionar)
 /catalogos y logos y marca/

@@ -1,4 +1,9 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import type { NextConfig } from "next";
+
+const currentDir = path.dirname(fileURLToPath(import.meta.url));
+const monorepoRoot = path.resolve(currentDir, "..");
 
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -17,8 +22,9 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   cacheComponents: true,
   partialPrefetching: true,
+  outputFileTracingRoot: monorepoRoot,
   turbopack: {
-    root: process.cwd(),
+    root: monorepoRoot,
     rules: {
       "*.css": {
         loaders: ["@tailwindcss/turbopack"],

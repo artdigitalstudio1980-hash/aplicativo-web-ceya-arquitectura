@@ -5,7 +5,7 @@
 | Campo | Valor |
 |---|---|
 | Dominio objetivo | `ceyaarquitectura.com` |
-| Estado | FASE 1 completada (scaffold Next.js) · FASE 2 pendiente |
+| Estado | FASE 2 completada (monorepo frontend/backend) · FASE 3 pendiente (PostgreSQL/Prisma) |
 | Repositorio | Público durante el desarrollo, sin secretos ni datos personales |
 | Licencia | Propietaria — todos los derechos reservados |
 
@@ -13,42 +13,76 @@
 
 Centralizar la presencia digital y la operación comercial de CEYA: catálogo de productos TOSCANA, servicios de arquitectura y construcción, portafolio de proyectos, cotizaciones, contacto y panel administrativo, con una capa de IA aislada y aprobación humana para operaciones sensibles.
 
-## Stack previsto
+## Stack actual
 
 | Componente | Tecnología |
 |---|---|
-| Frontend / Backend | Next.js 16 (App Router) + React 19 |
-| Lenguaje | TypeScript |
+| Frontend | Next.js 16 (App Router), React 19, Tailwind CSS 4 |
+| Backend | Fastify 5, TypeScript, Zod 4 |
+| Lenguaje | TypeScript 5.9.3 |
 | Estilos | Tailwind CSS 4 |
-| Base de datos | PostgreSQL 16 |
-| ORM | Prisma 7.10.1 (estable; no usar la línea 8 RC) |
-| Validación | Zod 4 |
-| Contenedores | Docker + Docker Compose |
+| Validación | Zod 4.6.7 |
+| Base de datos | PostgreSQL 16 (planeada para FASE 3) |
+| ORM | Prisma 7.10.1 (FASE 3) |
+| Contenedores | Docker + Docker Compose (FASE 6) |
 | Proxy inverso | Caddy (TLS automático) |
-| CI/CD | GitHub Actions |
+| CI/CD | GitHub Actions (FASE 8) |
 | Agentes IA | OpenClaw (red aislada, tools vía API) |
 
-Node.js fijado en **24.14.0** (`.nvmrc`). Las versiones exactas se fijan en `package.json` y `package-lock.json` al iniciar la FASE 1 y se validan con build + auditoría antes de adoptarlas.
+Node.js fijado en **24.14.0** (`.nvmrc`). Las versiones exactas se fijan en los `package.json` de cada workspace y en el lockfile.
 
-## Estructura objetivo
+## Estructura actual (FASE 2 — monorepo)
 
 ```text
 .
-├── src/
-│   ├── app/            # rutas públicas, admin y API
-│   ├── components/     # UI, layout y compartidos
-│   ├── features/       # servicios, proyectos, portafolio, contacto, admin
-│   ├── lib/            # seguridad, validación, base de datos, utilidades
-│   ├── services/       # lógica de aplicación
-│   └── types/
-├── prisma/             # esquema y migraciones versionadas
-├── tests/
+├── frontend/
+│   ├── src/
+│   ├── next.config.ts
+│   ├── package.json
+│   └── ...
+├── backend/
+│   ├── src/
+│   ├── tests/
+│   ├── .env.example
+│   ├── package.json
+│   └── ...
+├── packages/
+│   └── shared/
 ├── docs/
-├── .github/workflows/
-├── Dockerfile
-├── compose.yaml
+├── .github/
+│   └── workflows/
+├── .gitignore
+├── .npmrc
+├── package.json
+├── tsconfig.base.json
 └── ...
 ```
+
+- `frontend/`: aplicación Next.js con rutas públicas, componentes y estilos.
+- `backend/`: API Fastify con health check, validación de contacto y seguridad base.
+- `packages/shared/`: esquemas y tipos Zod compartidos (`@ceya/shared`).
+
+## Comandos
+
+| Comando | Función |
+|---|---|
+| `npm run dev` | Compila `@ceya/shared`, levanta backend, tests compartidos y frontend. |
+| `npm run dev:frontend` | Levanta solo el frontend en `http://localhost:3000`. |
+| `npm run dev:backend` | Levanta solo el backend en `http://localhost:3001`. |
+| `npm run dev:shared` | Compila `@ceya/shared` en watch. |
+| `npm run build` | Build de `@ceya/shared`, backend y frontend. |
+| `npm run lint` | ESLint en todos los workspaces. |
+| `npm run typecheck` | TypeScript estricto sin emit. |
+| `npm run test` | Pruebas unitarias/API con Vitest. |
+| `npm run audit` | `npm audit --audit-level=high`. |
+
+Verificación ejecutada en FASE 2:
+
+- `npm run build`: OK.
+- `npm run lint`: OK.
+- `npm run typecheck`: OK.
+- `npm run test`: OK (3 tests).
+- `npm run audit`: OK.
 
 ## Documentación
 
