@@ -1,0 +1,62 @@
+# Dependencias
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Next.js
+/.next/
+/out/
+/build
+next-env.d.ts
+
+# Producción
+/dist
+
+# Entorno y secretos
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+logs
+*.log
+
+# Pruebas y cobertura
+/coverage
+/.nyc_output
+/test-results
+/playwright-report
+
+# Editores y sistema
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.swp
+*~
+
+# TypeScript
+*.tsbuildinfo
+
+# Vercel / despliegue
+.vercel
+.netlify
+
+# Datos locales
+/prisma/dev.db
+/prisma/dev.db-journal
+
+# Recursos locales de marca y catálogos (no versionar)
+/catalogos y logos y marca/
+/identidad-corporativa/
